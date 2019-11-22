@@ -1,0 +1,12 @@
+extends header.pug
+append body
+    form(id="loginForm", action="/login", method="post", class="loginBox")
+        div
+            label(class="checkoutLabel")="Username "
+            input(type="text", name="username")
+        div
+            label(class="checkoutLabel")="Password "
+            input(type="password", name="password")
+        div
+            button(type='submit', class="submitOrder")="Login"
+

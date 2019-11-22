@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/VegaNan/MTM282Final/issues"
   },
-  "homepage": "https://github.com/VegaNan/MTM282Final#readme"
+  "homepage": "https://github.com/VegaNan/MTM282Final#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "mongoose": "^5.7.12",
+    "pug": "^2.0.4"
+  }
 }

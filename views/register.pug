@@ -1,0 +1,21 @@
+extends header.pug
+append body
+    form(id="registerBox", action="/register", method="post", class="loginBox")
+        div
+            label(class="checkoutLabel")="First Name "
+            input(type="text", name="fn")
+        div
+            label(class="checkoutLabel")="Last Name "
+            input(type="text", name="ln")
+        div
+            label(class="checkoutLabel")="Username "
+            input(type="text", name="username")
+        div
+            label(class="checkoutLabel")="Email "
+            input(type="text", name="email")
+        div
+            label(class="checkoutLabel")="Password "
+            input(type="password", name="password")
+        div
+            button(type='submit', class="submitOrder")="Register"
+
