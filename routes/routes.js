@@ -175,10 +175,25 @@ router.get('/questions', function(req, res) {
 });
 
 router.post('/questions', function(req, res) {
-
     currentUser.answers=[req.body.q1answer, req.body.q2answer, req.body.q3answer];
     console.log(currentUser.answers)
     res.redirect("/");
+});
+
+router.get('/admin', function(req, res){
+    if(currentUser == null){
+        res.redirect("/login");
+    }else if(currentUser["roles"].includes("Admin")){
+        var model = {
+            title: "Admin",
+            pageTitle: "Admin",
+            loggedIn: loggedIn,
+            canEdit: canEdit
+        };
+        res.render("admin", model);
+    }else{
+        res.redirect("/login");
+    }
 });
 
 
