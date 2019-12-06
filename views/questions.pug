@@ -1,6 +1,7 @@
 extends header.pug
 append body
-    form(class="question" id="questionsForm")
+    form(id="questionsForm")
+        div(class="question")
         p(class="question" id="question1")=questions[0][0]
         div(class="option")
             label(for="opt1")=questions[0][1]
@@ -14,6 +15,7 @@ append body
         div(class="option")=questions[0][4]
             label(for="opt4")
             input(name="q1answer" type="radio" value="4" id="opt4")
+
         p(class="question" id="question2")=questions[1][0]
         div(class="option")
             label(for="opt1")=questions[1][1]
@@ -27,6 +29,7 @@ append body
         div(class="option")
             label(for="opt4")=questions[1][4]
             input(name="q2answer" type="radio" value="4" id="opt4")
+
         p(class="question" id="question3")=questions[2][0]
         div(class="option")
             label(for="opt1")=questions[2][1]
@@ -40,3 +43,5 @@ append body
         div(class="option")
             label(for="opt4")=questions[2][4]
             input(name="q3answer" type="radio" value="4" id="opt4")
+        div
+            button(type='submit', class="submit")="Submit"

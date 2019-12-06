@@ -21,7 +21,8 @@ const userSchema = new Schema({
     email: String,
     userName: String,
     password: String,
-    roles: Array
+    roles: Array,
+    answers: Array
 });
 const User = mongoose.model("Users", userSchema);
 
@@ -137,7 +138,8 @@ router.post("/register", function (req, res) {
                 email: em,
                 userName: un,
                 password: ps,
-                roles: ["User"]
+                roles: ["User"],
+                answers: []
             });
 
             req.session.username = un;
