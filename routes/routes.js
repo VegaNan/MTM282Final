@@ -21,7 +21,8 @@ const userSchema = new Schema({
     email: String,
     userName: String,
     password: String,
-    roles: Array
+    roles: Array,
+    answers: Array
 });
 const User = mongoose.model("Users", userSchema);
 
@@ -70,28 +71,32 @@ router.get("/login", function(req, res) {
 });
 
 router.post("/login", function (req, res) {
-
-
     //check database
     getUserByUsername(req.body.username).then(function () {
 
         if(currentUser == null){
             res.redirect("/register");
         }else{
+            loggedIn = loggedIn;
             bcrypt.compare(req.body.password, currentUser.password).then(function (correct) {
                 if (correct) {
                     req.session.userId = currentUser._id;
                     req.session.username = currentUser.userName;
                     loggedIn = true;
+
                     if (currentUser["roles"].includes("Admin")) {
                         canEdit = true;
-                        res.redirect("/newItem");
-                    } else if (currentUser["roles"].includes("User")) {
+                        res.redirect("/admin");
+                    }else if(currentUser.answers.length == 0){
+                        loggedIn = true;
+                        res.redirect("/questions");
+                    }else if (currentUser["roles"].includes("User")) {
+                        loggedIn = true;
                         res.redirect("/");
                     }
                 } else {
                     console.log("failed login")
-                    res.redirect("/questions")
+                    res.redirect("/login")
                 }
             });
         }
@@ -140,7 +145,8 @@ router.post("/register", function (req, res) {
                 email: em,
                 userName: un,
                 password: ps,
-                roles: ["User"]
+                roles: ["User"],
+                answers: []
             });
 
             req.session.username = un;
@@ -154,20 +160,43 @@ router.post("/register", function (req, res) {
 });
 
 router.get('/questions', function(req, res) {
-    var qas = [["Rick Astley's never gonna: ", "Give you up", "Let you down", "Run around", "Desert You"],
-                ["What is your favorite pizza topping?", "Pepperoni" ,"Cheese", "Pineapple", "Mayonnaise"],
-                ["How old are you?", "17 or younger", "18-24", "25-34", "34+"]];
-    var model = {
-        questions: qas,
-        title: "Questions",
-        pageTitle: "Answer the following questions",
-        loggedIn: loggedIn,
-        canEdit: canEdit
-    };
-    res.render("questions", model);
+    if(currentUser == null){
+        res.redirect("/login")
+    }else{
+        var qas = [["Rick Astley's never gonna: ", "Give you up", "Let you down", "Run around", "Desert You"],
+                    ["What is your favorite pizza topping?", "Pepperoni" ,"Cheese", "Pineapple", "Mayonnaise"],
+                    ["How old are you?", "17 or younger", "18-24", "25-34", "34+"]];
+        var model = {
+            questions: qas,
+            title: "Questions",
+            pageTitle: "Answer the following questions",
+            loggedIn: loggedIn,
+            canEdit: canEdit
+        };
+        res.render("questions", model);
+    }
 });
-router.post('/questions', function(req, res) {
 
+router.post('/questions', function(req, res) {
+    currentUser.answers=[req.body.q1answer, req.body.q2answer, req.body.q3answer];
+    console.log(currentUser.answers)
+    res.redirect("/");
+});
+
+router.get('/admin', function(req, res){
+    if(currentUser == null){
+        res.redirect("/login");
+    }else if(currentUser["roles"].includes("Admin")){
+        var model = {
+            title: "Admin",
+            pageTitle: "Admin",
+            loggedIn: loggedIn,
+            canEdit: canEdit
+        };
+        res.render("admin", model);
+    }else{
+        res.redirect("/login");
+    }
 });
 
 module.exports = router;
