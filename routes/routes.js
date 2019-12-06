@@ -7,6 +7,7 @@ var userCount;
 var currentUser;
 const bcrypt = require('bcrypt');
 const salt = 2;
+var usersList = [];
 
 //connect to the database
 mongoose.connect("mongodb+srv://root:root@cluster0-cgcq1.mongodb.net/mtm282final?retryWrites=true&w=majority", {
@@ -46,19 +47,47 @@ async function countUsers() {
     });
 }
 
+async function getUsers(){
+    await User.find({}, function(err, users) {
+        usersList = [];
+        users.forEach(function(user){
+            usersList.push(user);
+        })
+
+    });
+}
+
 router.get('/', function(req, res) {
-    var model = {
-        title: "Home",
-        pageTitle: "Welcome",
-        loggedIn: loggedIn,
-        canEdit: canEdit
-    };
-
-
-
-
-
-    res.render("index", model);
+    var answers = [[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+    getUsers().then(function () {
+        answers = [[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+        usersList.forEach(function(singleuser){
+            if(singleuser.answers !== undefined && !singleuser.answers.length == 0){
+                for(var i = 0; i < 3; i ++){
+                    var answer = singleuser.answers[i];
+                    if(answer == 1){
+                        answers[i][0] = answers[i][0] + 1;
+                    }else if(answer == 2){
+                        answers[i][1] = answers[i][1] + 1;
+                    }else if(answer == 3){
+                        answers[i][2] = answers[i][2] + 1;    
+                    }else if(answer == 4){
+                        answers[i][3] = answers[i][3] + 1;
+                    }
+                }
+            }
+        })
+        console.log(answers);
+        var model = {
+            title: "Home",
+            pageTitle: "Welcome",
+            loggedIn: loggedIn,
+            canEdit: canEdit,
+            answers : answers
+        };
+        res.render("index", model);
+    });
+    
 });
 
 
@@ -182,7 +211,8 @@ router.get('/questions', function(req, res) {
 
 router.post('/questions', function(req, res) {
     currentUser.answers=[req.body.q1answer, req.body.q2answer, req.body.q3answer];
-    console.log(currentUser.answers)
+    console.log(currentUser.answers);
+    currentUser.save();
     res.redirect("/");
 });
 
