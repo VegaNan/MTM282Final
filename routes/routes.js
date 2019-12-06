@@ -52,6 +52,9 @@ router.get('/', function(req, res) {
         loggedIn: loggedIn,
         canEdit: canEdit
     };
+
+
+
     res.render("index", model);
 });
 
@@ -166,4 +169,5 @@ router.get('/questions', function(req, res) {
 router.post('/questions', function(req, res) {
 
 });
+
 module.exports = router;
