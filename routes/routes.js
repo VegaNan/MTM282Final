@@ -59,6 +59,9 @@ async function getUsers(){
 
 router.get('/', function(req, res) {
     var answers = [[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+    var questions = [["Rick Astley's never gonna: ", "Give you up", "Let you down", "Run around", "Desert You"],
+            ["What is your favorite pizza topping?", "Pepperoni" ,"Cheese", "Pineapple", "Mayonnaise"],
+            ["How old are you?", "17 or younger", "18-24", "25-34", "34+"]];
     getUsers().then(function () {
         answers = [[0,0,0,0],[0,0,0,0],[0,0,0,0]];
         usersList.forEach(function(singleuser){
@@ -77,13 +80,17 @@ router.get('/', function(req, res) {
                 }
             }
         })
+
+
+
         console.log(answers);
         var model = {
             title: "Home",
             pageTitle: "Welcome",
             loggedIn: loggedIn,
             canEdit: canEdit,
-            answers : answers
+            answers : answers,
+            question: questions
         };
         res.render("index", model);
     });

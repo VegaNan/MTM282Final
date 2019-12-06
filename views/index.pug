@@ -10,27 +10,63 @@ append body
 
     script(src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0")
     script.
-        -window.onload = function() {
-            -var chart = document.getElementById("barChart").getContext('2d');
-            -var myChart = new Chart(chart, {
-                -type: 'bar',
-                -data: {
-                    -labels: [labels[0], labels[1], labels[2], labels[3]],
-                    -datasets: [{
-                        -label: 'Getting the Dets',
-                        -data: [data[0], data[1], data[2], data[3]],
-                        -backgroundColor: ['#F9557B', '#FA9F6B', '#579D9C'],
-                        -borderColor: ['#FFF'],
-                        -borderWidth: 1
+        window.onload = function() {
+            var chart1 = document.getElementById("barChart1").getContext('2d');
+            var myChart1 = new Chart(chart1, {
+                type: 'bar',
+                data: {
+                    labels: ['#{question[0][1]}', "#{question[0][2]}", "#{question[0][3]}", "#{question[0][4]}"],
+                    datasets: [{
+                        data: ["#{answers[0][0]}", "#{answers[0][1]}", "#{answers[0][2]}", "#{answers[0][3]}"],
+                        backgroundColor: ['#F9557B', '#FA9F6B', '#579D9C'],
+                        borderColor: ['#FFF'],
+                        borderWidth: 1
                     }]
                 },
-                -options: {
-                    -title: {
-                        -display: true,
-                        -text: title
-                    },
-                    -legend: {
-                        -position: "bottom"
+                options: {
+                    title: {
+                        display: true,
+                        text: "#{question[0][0]}"
+                    }
+                }
+            });
+
+            var chart2 = document.getElementById("barChart2").getContext('2d');
+            var myChart2 = new Chart(chart2, {
+                type: 'bar',
+                data: {
+                    labels: ["#{question[1][1]}", "#{question[1][2]}", "#{question[1][3]}", "#{question[1][4]}"],
+                    datasets: [{
+                        data: ["#{answers[1][0]}", "#{answers[1][1]}", "#{answers[1][2]}", "#{answers[1][3]}"],
+                        backgroundColor: ['#F9557B', '#FA9F6B', '#579D9C'],
+                        borderColor: ['#FFF'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "#{question[1][0]}"
+                    }
+                }
+            });
+
+            var chart3 = document.getElementById("barChart3").getContext('2d');
+            var myChart3 = new Chart(chart3, {
+                type: 'bar',
+                data: {
+                    labels: ["#{question[2][1]}", "#{question[2][2]}", "#{question[2][3]}", "#{question[2][4]}"],
+                    datasets: [{
+                        data: ["#{answers[2][0]}", "#{answers[2][1]}", "#{answers[2][2]}", "#{answers[2][3]}"],
+                        backgroundColor: ['#F9557B', '#FA9F6B', '#579D9C'],
+                        borderColor: ['#FFF'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "#{question[2][0]}"
                     }
                 }
             });
