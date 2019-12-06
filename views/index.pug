@@ -1,1 +1,38 @@
 extends header.pug
+append body
+    div(id="chart1")
+        canvas(id="barChart1")
+    div(id="chart2")
+        canvas(id="barChart2")
+    div(id="chart3")
+        canvas(id="barChart3")
+
+
+    script(src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0")
+    script.
+        -window.onload = function() {
+            -var chart = document.getElementById("barChart").getContext('2d');
+            -var myChart = new Chart(chart, {
+                -type: 'bar',
+                -data: {
+                    -labels: ['Rick Astley', 'Pizza', 'Age'],
+                    -datasets: [{
+                        -label: 'Getting the Dets',
+                        -data: [1,2,4],
+                        -backgroundColor: ['#F9557B', '#FA9F6B', '#579D9C'],
+                        -borderColor: ['#FFF'],
+                        -borderWidth: 1
+                    }]
+                },
+                -options: {
+                    -title: {
+                        -display: true,
+                        -text: "chart"
+                    },
+                    -legend: {
+                        -position: "bottom"
+                    }
+                }
+            });
+        }
+
