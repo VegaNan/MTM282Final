@@ -166,6 +166,7 @@ router.get('/questions', function(req, res) {
         var qas = [["Rick Astley's never gonna: ", "Give you up", "Let you down", "Run around", "Desert You"],
                     ["What is your favorite pizza topping?", "Pepperoni" ,"Cheese", "Pineapple", "Mayonnaise"],
                     ["How old are you?", "17 or younger", "18-24", "25-34", "34+"]];
+        
         var model = {
             questions: qas,
             title: "Questions",
