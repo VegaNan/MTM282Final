@@ -221,6 +221,7 @@ router.get('/admin', function(req, res){
         res.redirect("/login");
     }else if(currentUser["roles"].includes("Admin")){
         var model = {
+            users: usersList,
             title: "Admin",
             pageTitle: "Admin",
             loggedIn: loggedIn,
