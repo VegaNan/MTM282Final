@@ -2,7 +2,7 @@ const express = require("express");
 var port = 3003;
 const app = express();
 const session = require("express-session");
-
+const bcrypt = require('bcrypt');
 app.use(session({
     secret: "rawr",
     cookie: {}
@@ -19,6 +19,6 @@ app.use('', routes);
 app.set("view engine", "pug");
 app.use(express.static(__dirname + "/public"));
 
-app.listen(port, function() {
+app.listen(port, function () {
     console.log("Express started listening on port: " + port);
 });

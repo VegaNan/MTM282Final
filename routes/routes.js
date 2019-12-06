@@ -5,9 +5,11 @@ var loggedIn = false;
 var canEdit = false;
 var userCount;
 var currentUser;
+const bcrypt = require('bcrypt');
+const salt = 2;
 
 //connect to the database
-mongoose.connect("mongodb+srv://admin:<admin>@cluster0-jkjax.mongodb.net/test?retryWrites=true&w=majority", {
+mongoose.connect("mongodb+srv://root:root@cluster0-cgcq1.mongodb.net/mtm282final?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -64,26 +66,35 @@ router.get("/login", function(req, res) {
     res.render("login", model);
 });
 
-router.post("/login", function(req, res) {
+router.post("/login", function (req, res) {
+
 
     //check database
-    getUserByUsername(req.body.username).then(function() {
-        if (currentUser.password == req.body.password) {
-            req.session.userId = currentUser._id;
-            req.session.username = currentUser.userName;
-            loggedIn = true;
-            if(currentUser["roles"].includes("Admin")){
-                canEdit = true;
-                res.redirect("/newItem");
-            }else if (currentUser["roles"].includes("User")){
-                res.redirect("/");
-            }
-        }else {
-            console.log("failed login")
-            res.redirect("/login")
+    getUserByUsername(req.body.username).then(function () {
+
+        if(currentUser == null){
+            res.redirect("/register");
+        }else{
+            bcrypt.compare(req.body.password, currentUser.password).then(function (correct) {
+                if (correct) {
+                    req.session.userId = currentUser._id;
+                    req.session.username = currentUser.userName;
+                    loggedIn = true;
+                    if (currentUser["roles"].includes("Admin")) {
+                        canEdit = true;
+                        res.redirect("/newItem");
+                    } else if (currentUser["roles"].includes("User")) {
+                        res.redirect("/");
+                    }
+                } else {
+                    console.log("failed login")
+                    res.redirect("/questions")
+                }
+            });
         }
     });
 });
+
 
 router.get("/logout", function(req, res) {
     req.session.username = "";
@@ -110,30 +121,49 @@ router.get("/register", function(req, res) {
 });
 
 
-router.post("/register", function(req, res) {
-    countUsers().then(function() {
+router.post("/register", function (req, res) {
+    countUsers().then(function () {
         var id = userCount;
         var un = req.body.username;
-        var ps = req.body.password;
+        var pass = req.body.password;
         var fn = req.body.fn;
         var ln = req.body.ln;
         var em = req.body.email;
 
-        User.create({
-            _id: id,
-            firstName: fn,
-            lastName: ln,
-            email: em,
-            userName: un,
-            password: ps,
-            roles: ["User"]
-        });
+        bcrypt.hash(pass, salt).then(function (ps) {
+            User.create({
+                _id: id,
+                name: fn + " " + ln,
+                email: em,
+                userName: un,
+                password: ps,
+                roles: ["User"]
+            });
 
-        req.session.username = un;
-        req.session.userId = id;
-        loggedIn = true;
-        res.redirect("/");
+            req.session.username = un;
+            req.session.userId = id;
+            loggedIn = true;
+            res.redirect("/");
+
+        })
+
     });
 });
 
+router.get('/questions', function(req, res) {
+    var qas = [["Rick Astley's never gonna: ", "Give you up", "Let you down", "Run around", "Desert You"],
+                ["What is your favorite pizza topping?", "Pepperoni" ,"Cheese", "Pineapple", "Mayonnaise"],
+                ["How old are you?", "17 or younger", "18-24", "25-34", "34+"]];
+    var model = {
+        questions: qas,
+        title: "Questions",
+        pageTitle: "Answer the following questions",
+        loggedIn: loggedIn,
+        canEdit: canEdit
+    };
+    res.render("questions", model);
+});
+router.post('/questions', function(req, res) {
+
+});
 module.exports = router;
